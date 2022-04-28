@@ -25,11 +25,11 @@ def classify(info: RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
-    class_res = [{'service_class': 'government', 'possibility': 0.1}，
-    {'service_class': 'data', 'possibility': 0.1}，
-    {'service_class': 'nordic', 'possibility': 0.1}，
-    {'service_class': 'calendars', 'possibility': 0.1}，
-    {'service_class': 'events', 'possibility': 0.1}，
+    class_res = [{'service_class': 'government', 'possibility': 0.1},
+    {'service_class': 'data', 'possibility': 0.1},
+    {'service_class': 'nordic', 'possibility': 0.1},
+    {'service_class': 'calendars', 'possibility': 0.1},
+    {'service_class': 'events', 'possibility': 0.1},
     {'service_class': 'accounting', 'possibility': 0.1}]
     return {'status': r, 'class_res': class_res}
 
