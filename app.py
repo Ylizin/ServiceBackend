@@ -18,7 +18,8 @@ def classify(info : RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
-    return {'status':r,'class_res':'test'}
+    class_res = [{'service_class':'1111','possibility':0.1}]
+    return {'status':r,'class_res':class_res}
 
 @app.post("/match",response_model=MatchResponseModel)
 def match(info : RequestInfo):
@@ -26,4 +27,12 @@ def match(info : RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
-    return {'status':r,'match_res':[]}
+    match_res = [
+        {
+            'service_name' : 'test_service',
+            'service_description' : 'blabla',
+            'service_tags' : ['tag1','tag2','tag3'],
+            'match_score' : 0.8
+        }
+    ]
+    return {'status':r,'match_res':match_res}

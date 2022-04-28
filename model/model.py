@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-from soupsieve import match
-
 
 class ResponseStatus(BaseModel):
     status : int  = 0
@@ -14,11 +12,13 @@ class RequestInfo(BaseModel):
     req_type: int = -1
     req_text: str = ''
 
+class SerivceClassification(BaseModel):
+    service_class:str
+    possibility:float 
 
 class ClassifyResponseModel(BaseModel):
     status: ResponseStatus
-    class_res: str
-
+    class_res: List[SerivceClassification] = []
 
 class MatchService(BaseModel):
     service_name: str
