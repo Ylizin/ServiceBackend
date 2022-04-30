@@ -1,2 +1,2 @@
 
-nohup gunicorn app:app -c config.py &
+conda activate fastapi &&  gunicorn app:app -c config.py 
