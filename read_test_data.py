@@ -1,5 +1,9 @@
 #%%
 import pandas as pd
+from requests import head
+
+tag2servs = pd.read_csv('tag_servs.csv',header = None,index_col = 0)
+pw_df = pd.read_csv('filtered_datas.csv',index_col=0).loc[tag2servs.index]
 
 # %%
 from model import *
