@@ -23,7 +23,7 @@ class MatchService(BaseModel):
     service_name: str
     service_description: str
     service_tags: List[str]
-    # match_score: float
+    match_score: float
 
 class ServiceInfo(BaseModel):
     service_name: str

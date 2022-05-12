@@ -19,10 +19,11 @@ def match_text(text):
     vec = torch.mean(encoder(text1),dim = 0,keepdim=True)
     sims = cos(vec,all_f)
     sims_sort = sims.argsort(dim = -1,descending=True)
-    return sims_sort[:20].tolist()
+    res = sims_sort[:20].tolist()
+    return res, sims[res].tolist()
 # %%
-# text = 'government data data nordic'
+text = 'government data data nordic'
 
-# print(match_text(text))
+print(match_text(text))
 
 # %%

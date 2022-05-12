@@ -2,7 +2,7 @@ from os import stat
 from re import S
 
 from yaml import load
-from model import ClassifyResponseModel, RequestInfo, ResponseStatus, MatchResponseModel,AllServiceResponseModel,ServiceInfo
+from model import ClassifyResponseModel, RequestInfo, ResponseStatus, MatchResponseModel,AllServiceResponseModel,ServiceInfo,MatchService
 from read_test_data import test_match,pw_df
 from fastapi import FastAPI,Path
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,8 +45,9 @@ def match(info: RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
-    res = match_text(info.req_text)
-    match_res = pw_df.iloc[res]
+    res,score = match_text(info.req_text)
+    match_res = __pack_match_data(pw_df.iloc[res],score)
+
     
     # match_res = [
     #     {
@@ -56,7 +57,7 @@ def match(info: RequestInfo):
     #         'match_score' : 0.8
     #     }
     # ]
-    return {'status': r, 'match_res': __pack_df_data(match_res)}
+    return {'status': r, 'match_res':match_res}
 
 
 @app.get(r'/all/{page_id}/{page_num}',response_model=AllServiceResponseModel)
@@ -85,6 +86,17 @@ def getall_sevrice(page_id: int = Path(...,title = "page id",ge=1),page_num : in
         r.message = 'success'
     return {'status':r, 'all_count':all_len,'all_service':all_service}
 
+def __pack_match_data(df,score):
+    service_li = []
+    for tup,s in zip(df.itertuples(),score):
+        build_dict = {
+            'service_name':tup.Name,
+            'service_description':tup.Description,
+            'service_tags':eval(tup.Categories),
+            'match_score':s
+            }
+        service_li.append(MatchService(**build_dict))
+    return service_li
 
 def __pack_df_data(df):
     service_li = []
