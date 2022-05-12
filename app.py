@@ -1,9 +1,12 @@
 from os import stat
 from re import S
+
+from yaml import load
 from model import ClassifyResponseModel, RequestInfo, ResponseStatus, MatchResponseModel,AllServiceResponseModel,ServiceInfo
 from read_test_data import test_match,pw_df
 from fastapi import FastAPI,Path
 from fastapi.middleware.cors import CORSMiddleware
+from cls.inference import load_model, predict
 import logging
 logger = logging.getLogger("gunicorn.error")
 
@@ -20,6 +23,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event('startup')
+def start():
+    load_model()
+
 
 @app.post("/classify", response_model=ClassifyResponseModel)
 def classify(info: RequestInfo):
@@ -27,12 +34,7 @@ def classify(info: RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
-    class_res = [{'service_class': 'government', 'possibility': 0.1},
-    {'service_class': 'data', 'possibility': 0.1},
-    {'service_class': 'nordic', 'possibility': 0.1},
-    {'service_class': 'calendars', 'possibility': 0.1},
-    {'service_class': 'events', 'possibility': 0.1},
-    {'service_class': 'accounting', 'possibility': 0.1}]
+    class_res = [{'service_class':k,'possibility':v} for k,v in predict(info.req_text).items()]
     return {'status': r, 'class_res': class_res}
 
 
