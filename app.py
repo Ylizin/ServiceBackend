@@ -7,6 +7,7 @@ from read_test_data import test_match,pw_df
 from fastapi import FastAPI,Path
 from fastapi.middleware.cors import CORSMiddleware
 from cls.inference import load_model, predict
+from match.match import match_text
 import logging
 logger = logging.getLogger("gunicorn.error")
 
@@ -44,6 +45,9 @@ def match(info: RequestInfo):
     r.status = 400
     r.message = 'success'
     logger.debug(info)
+    res = match_text(info.req_text)
+    match_res = pw_df.iloc[res]
+    
     # match_res = [
     #     {
     #         'service_name' : 'test_service',
@@ -52,7 +56,7 @@ def match(info: RequestInfo):
     #         'match_score' : 0.8
     #     }
     # ]
-    return {'status': r, 'match_res': test_match}
+    return {'status': r, 'match_res': __pack_df_data(match_res)}
 
 
 @app.get(r'/all/{page_id}/{page_num}',response_model=AllServiceResponseModel)

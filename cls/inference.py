@@ -19,7 +19,7 @@ model = None
 def load_model():
     global model
 
-    model = fasttext.FastText.load_model('./cls/fasttext_model_service.bin')
+    model = fasttext.FastText.load_model('./trained_models/fasttext_model_service.bin')
 
 def _replacer(text):
     replacement_patterns = [
