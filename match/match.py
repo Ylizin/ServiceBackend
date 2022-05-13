@@ -1,4 +1,5 @@
 #%%
+from cmath import nan
 import torch
 import pickle 
 from torch import nn
@@ -15,14 +16,17 @@ cos = nn.CosineSimilarity()
 from .eda import lem
 #%%
 def match_text(text):
+    if len(text) == 0:
+        return [],[]
+    # print(list(filter(lambda x: x in di.token2id,lem(text))))
     text1 = torch.tensor([di.token2id[w] for w in filter(lambda x: x in di.token2id,lem(text))]).to(torch.long)
     vec = torch.mean(encoder(text1),dim = 0,keepdim=True)
     sims = cos(vec,all_f)
     sims_sort = sims.argsort(dim = -1,descending=True)
     res = sims_sort[:20].tolist()
     return res, sims[res].tolist()
-# # %%
-# text = 'government data data nordic'
+# %%
+# text = 'e'
 
 # print(match_text(text))
 

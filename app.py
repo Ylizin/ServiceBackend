@@ -88,6 +88,10 @@ def getall_sevrice(page_id: int = Path(...,title = "page id",ge=1),page_num : in
 
 def __pack_match_data(df,score):
     service_li = []
+    if len(score)==0:
+        return []
+    elif not score[0]>0:
+        return []
     for tup,s in zip(df.itertuples(),score):
         build_dict = {
             'service_name':tup.Name,
