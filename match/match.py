@@ -21,9 +21,9 @@ def match_text(text):
     sims_sort = sims.argsort(dim = -1,descending=True)
     res = sims_sort[:20].tolist()
     return res, sims[res].tolist()
-# %%
-text = 'government data data nordic'
+# # %%
+# text = 'government data data nordic'
 
-print(match_text(text))
+# print(match_text(text))
 
 # %%
